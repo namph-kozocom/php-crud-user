@@ -130,5 +130,21 @@ class UserProvider {
             echo "Lỗi lưu database: " . $e->getMessage();
         }
     }
+
+    public function deleteUser($id)
+    {
+        $user = $this->getUserById($id);
+        if ($user) {
+            $imagePath = __DIR__ . "/" . $user->getAvatar();
+            if (file_exists($imagePath) && is_file($imagePath)) {
+                unlink($imagePath);
+            }
+            $this->db->query("DELETE FROM users WHERE id = $id");
+            header('Location: /');
+            exit();
+        } else {
+            echo "Không tìm thấy user!";
+        }
+    }
 }
 ?>

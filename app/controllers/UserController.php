@@ -37,6 +37,11 @@ class UserController {
     {
         $this->userProvider->editUser($id);
     }
+
+    public function deleteUser($id)
+    {
+        $this->userProvider->deleteUser($id);
+    }
 }
 
 ?>

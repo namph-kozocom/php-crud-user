@@ -75,7 +75,7 @@
                                             class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 text-sm leading-5 font-medium">
                                             <a href="/edit-user/<?= $user->getId() ?>" class="text-indigo-600 hover:text-indigo-900">Edit</a>
                                             <span> | </span>
-                                            <a href="#" class="text-indigo-600 hover:text-indigo-900">Delete</a>
+                                            <a href="/delete/<?= $user->getId() ?>" onclick="return confirm('Bạn có chắc chắn muốn xóa sách này không?')" class="text-red-600 hover:text-red-700">Delete</a>
                                         </td>
                                     </tr>
                                 <?php } ?>

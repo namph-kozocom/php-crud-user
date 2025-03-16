@@ -30,7 +30,10 @@ switch ($urlParts[1]) {
             }
             break;
         }
-
+    case 'delete':
+        if (isset($urlParts[1]) && is_numeric((int) $urlParts[2])) {
+            $controller->deleteUser($urlParts[2]);
+        }
 
     default:
         http_response_code(404);
