@@ -12,7 +12,6 @@ This is a simple CRUD (Create, Read, Update, Delete) application for user manage
 
 ## Project Structure
 ```
-d:/Admin/Documents/Study/PHP/crud-user-app/
 ├── .gitignore
 ├── .htaccess
 ├── app/
