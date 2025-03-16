@@ -16,6 +16,16 @@ class UserController {
         $users = $this->userProvider->getAllUser();
         include __DIR__ . '/../views/index.php';
     }
+
+    public function showAddUser()
+    {
+        include __DIR__ . '/../views/addUser.php';
+    }
+
+    public function saveUser()
+    {
+        $this->userProvider->saveUser();
+    }
 }
 
 ?>

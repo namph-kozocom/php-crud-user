@@ -13,6 +13,14 @@ switch ($urlParts[1]) {
     case '':
         $controller->index();
         break;
+    case 'add-user':
+        $controller->showAddUser();
+        break;
+    case 'save-user':
+        if ($method == 'POST') {
+            $controller->saveUser();
+            break;
+        }
 
     default:
         http_response_code(404);
