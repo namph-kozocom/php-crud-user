@@ -21,6 +21,16 @@ switch ($urlParts[1]) {
             $controller->saveUser();
             break;
         }
+    case 'edit-user':
+        if (isset($urlParts[1]) && is_numeric((int) $urlParts[2])) {
+            if ($method === 'GET') {
+                $controller->showEditUser($urlParts[2]);
+            } elseif ($method === 'POST') {
+                $controller->editUser($urlParts[2]);
+            }
+            break;
+        }
+
 
     default:
         http_response_code(404);

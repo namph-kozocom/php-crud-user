@@ -26,6 +26,17 @@ class UserController {
     {
         $this->userProvider->saveUser();
     }
+
+    public function showEditUser($id)
+    {
+        $user = $this->userProvider->getUserById($id);
+        include __DIR__ . '/../views/editUser.php';
+    }
+
+    public function editUser($id)
+    {
+        $this->userProvider->editUser($id);
+    }
 }
 
 ?>

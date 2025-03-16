@@ -27,6 +27,15 @@ class UserProvider {
         return $users;
     }
 
+    public function getUserById($id)
+    {
+        $query = "SELECT * FROM users WHERE id = $id";
+        $stmt = $this->db->query($query);
+        $userData = $stmt->fetchAll(PDO::FETCH_ASSOC)[0];
+        $user = new User($userData['id'], $userData['first_name'], $userData['last_name'], $userData['email'], $userData['phone'], $userData['avatar'], $userData['gender'], $userData['address']);
+        return $user;
+    }
+
     public function saveUser()
     {
         $uploadDir = "../../uploads/";
@@ -65,6 +74,60 @@ class UserProvider {
             } catch (PDOException $e) {
                 echo "Lỗi lưu database: " . $e->getMessage();
             }
+        }
+    }
+
+    public function editUser($id)
+    {
+        $user = $this->getUserById($id);
+        if (!$user) {
+            die("Không tìm thấy user!");
+        }
+
+        $uploadDir = "../../uploads/";
+        $firstName = $_POST['firstName'] ?? null;
+        $lastName = $_POST['lastName'] ?? null;
+        $email = $_POST['email'] ?? null;
+        $phone = $_POST['phone'] ?? null;
+        $address = $_POST['address'] ?? null;
+        $gender = $_POST['gender'] ?? null;
+        $avatar = $_FILES['avatar']['name'] ?? null;
+
+        $avatarPath = __DIR__ . "/" . $user->getAvatar();
+
+        if ($avatar) {
+            $imageFileType = strtolower(pathinfo($avatar, PATHINFO_EXTENSION));
+            $allowedTypes = ['jpg', 'jpeg', 'png', 'jfif'];
+            if (!in_array($imageFileType, $allowedTypes)) {
+                die("Chỉ hỗ trợ các định dạng JPG, JPEG, PNG, JFIF!");
+            }
+            $newAvatarPath = $uploadDir . time() . $avatar;
+            if (file_exists($avatarPath)) {
+                unlink($avatarPath);
+            }
+            if (move_uploaded_file($_FILES['avatar']['tmp_name'], __DIR__ . "/" . $newAvatarPath)) {
+                $avatarPath = $newAvatarPath;
+            }
+        }
+
+        try {
+            $stmt = $this->db->prepare("
+            UPDATE users 
+            SET first_name = :first_name, last_name = :last_name, email = :email, phone = :phone, avatar = :avatar, gender = :gender, address = :address
+            WHERE id = $id
+        ");
+            $stmt->bindParam(':first_name', $firstName);
+            $stmt->bindParam(':last_name', $lastName);
+            $stmt->bindParam(':email', $email);
+            $stmt->bindParam(':phone', $phone);
+            $stmt->bindParam(':avatar', $avatarPath);
+            $stmt->bindParam(':gender', $gender);
+            $stmt->bindParam(':address', $address);
+            $stmt->execute();
+
+            header("Location: /");
+        } catch (PDOException $e) {
+            echo "Lỗi lưu database: " . $e->getMessage();
         }
     }
 }
